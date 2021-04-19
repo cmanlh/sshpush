@@ -7,7 +7,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lifeonwalden.sshpush.bean.ParamConfig;
 
-public class Test {
+public class UploadTest {
     public static void main(String[] args) {
         JSch jSch = new JSch();
         try {
@@ -16,6 +16,7 @@ public class Test {
             JCommander.newBuilder().addObject(arg).build().parse(new String[]{"-p"});
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
+
             Channel channel = session.openChannel("shell");
             System.out.println(channel.isClosed());
             session.disconnect();

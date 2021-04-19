@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class ConfigTest {
+public class ConfigUploadTest {
 
     @Test
     public void parse() {
         try {
-            PushInfo pushInfo = JSON.parseObject(ConfigTest.class.getResourceAsStream("/exec.json"), PushInfo.class);
+            PushInfo pushInfo = JSON.parseObject(ConfigUploadTest.class.getResourceAsStream("/exec.json"), PushInfo.class);
 
             Assert.assertNotNull(pushInfo.getHost());
             Assert.assertTrue(pushInfo.getHost().size() == 1);
@@ -39,7 +39,7 @@ public class ConfigTest {
     public void checkpassword(){
         PushInfo pushInfo = null;
         try {
-            pushInfo = JSON.parseObject(ConfigTest.class.getResourceAsStream("/exec.json"), PushInfo.class);
+            pushInfo = JSON.parseObject(ConfigUploadTest.class.getResourceAsStream("/exec.json"), PushInfo.class);
             AuthProcessor.process(pushInfo);
         } catch (IOException e) {
             e.printStackTrace();
