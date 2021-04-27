@@ -11,7 +11,7 @@
       "hostId": "localhost",
       "action": "DOWNLOAD",
       "src": "/tmp/resources/uploadFile.json",
-      "target": "/home/luhong/"
+      "target": "/home/luhong"
     }
   ]
 }

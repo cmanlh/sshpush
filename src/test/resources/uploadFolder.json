@@ -11,7 +11,7 @@
       "hostId": "localhost",
       "action": "UPLOAD",
       "src": "/home/luhong/IdeaProjects/sshpush/src/test",
-      "target": "/tmp/"
+      "target": "/tmp"
     }
   ]
 }

@@ -49,7 +49,14 @@ public interface UploadProcessor {
                     throw e;
                 }
             }
-            String targetSubFolder = target.concat(file.getName()).concat("/");
+
+            String targetSubFolder = null;
+
+            if (target.endsWith("/")) {
+                targetSubFolder = target.concat(file.getName()).concat("/");
+            } else {
+                targetSubFolder = target.concat("/").concat(file.getName()).concat("/");
+            }
 
             for (File subFile : file.listFiles()) {
                 upload(channel, subFile.getAbsolutePath(), targetSubFolder);

@@ -36,14 +36,24 @@ public interface DownloadProcessor {
             java.io.File file = new File(target);
             if (file.exists() && file.isFile()) {
                 throw new RuntimeException("Invalid download target : ".concat(target));
+            } else if (!file.exists()) {
+                file.mkdirs();
             }
 
-            String targetFolder = file.getAbsolutePath().concat(File.pathSeparator).concat(new File(src).getName());
+            String targetFolder = file.getAbsolutePath().concat(File.separator).concat(new File(src).getName());
             new File(targetFolder).mkdirs();
 
             for (Object l : channel.ls(src)) {
                 ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) l;
-                System.out.println(entry.getFilename());
+                if (".".equalsIgnoreCase(entry.getFilename()) || "..".equalsIgnoreCase(entry.getFilename())) {
+                    continue;
+                } else {
+                    if (src.endsWith("/")) {
+                        download(channel, src.concat(entry.getFilename()), targetFolder);
+                    } else {
+                        download(channel, src.concat("/").concat(entry.getFilename()), targetFolder);
+                    }
+                }
             }
         }
     }
