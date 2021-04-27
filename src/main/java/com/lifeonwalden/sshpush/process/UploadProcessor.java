@@ -6,6 +6,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import com.lifeonwalden.sshpush.bean.PushStep;
 
+import java.io.File;
 import java.util.Map;
 
 public interface UploadProcessor {
@@ -21,7 +22,38 @@ public interface UploadProcessor {
 
         ChannelSftp channel = (ChannelSftp) session.openChannel("sftp");
         channel.connect();
-        channel.put(step.getSrc(), step.getTarget());
+        upload(channel, step.getSrc(), step.getTarget());
         channel.disconnect();
+    }
+
+    static void upload(ChannelSftp channel, String src, String target) throws SftpException {
+        java.io.File file = new File(src);
+        if (!file.exists()) {
+            throw new RuntimeException("Not found : ".concat(src));
+        }
+
+        if (file.isFile()) {
+            channel.put(src, target);
+
+            System.out.printf("Uploaded file %s\n", src);
+        } else {
+            channel.cd(target);
+            try {
+                if (channel.ls(file.getName()).isEmpty()) {
+                    channel.mkdir(file.getName());
+                }
+            } catch (SftpException e) {
+                if (ChannelSftp.SSH_FX_NO_SUCH_FILE == e.id) {
+                    channel.mkdir(file.getName());
+                } else {
+                    throw e;
+                }
+            }
+            String targetSubFolder = target.concat(file.getName()).concat("/");
+
+            for (File subFile : file.listFiles()) {
+                upload(channel, subFile.getAbsolutePath(), targetSubFolder);
+            }
+        }
     }
 }

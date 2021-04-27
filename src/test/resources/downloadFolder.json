@@ -9,9 +9,9 @@
   "step": [
     {
       "hostId": "localhost",
-      "action": "UPLOAD",
-      "src": "/home/luhong/IdeaProjects/sshpush/src/test/resources/uploadFile.json",
-      "target": "/tmp/"
+      "action": "DOWNLOAD",
+      "src": "/tmp/test",
+      "target": "/home/luhong/"
     }
   ]
 }

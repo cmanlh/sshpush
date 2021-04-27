@@ -25,13 +25,13 @@ public class Main {
             return;
         }
 
+        Map<String, Session> sessionMap = new HashMap<>();
         try {
             Optional<PushInfo> pushInfoOption = ConfigurationParse.parse(new File(args[0]));
             if (pushInfoOption.isPresent()) {
                 PushInfo pushInfo = pushInfoOption.get();
                 AuthProcessor.process(pushInfo);
 
-                Map<String, Session> sessionMap = new HashMap<>();
                 JSch jSch = new JSch();
                 for (HostInfo hostInfo : pushInfo.getHost()) {
                     Session session = null;
@@ -68,6 +68,8 @@ public class Main {
             e.printStackTrace();
         } catch (SftpException e) {
             e.printStackTrace();
+        } finally {
+            sessionMap.values().forEach(session -> session.disconnect());
         }
     }
 }

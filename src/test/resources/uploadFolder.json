@@ -10,7 +10,8 @@
     {
       "hostId": "localhost",
       "action": "UPLOAD",
-      "src": "ls"
+      "src": "/home/luhong/IdeaProjects/sshpush/src/test",
+      "target": "/tmp/"
     }
   ]
 }
