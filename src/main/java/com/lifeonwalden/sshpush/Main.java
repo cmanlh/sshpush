@@ -32,18 +32,20 @@ public class Main {
                 PushInfo pushInfo = pushInfoOption.get();
                 AuthProcessor.process(pushInfo);
 
-                JSch jSch = new JSch();
-                for (HostInfo hostInfo : pushInfo.getHost()) {
-                    Session session = null;
-                    if (hostInfo.getPort() > 0) {
-                        session = jSch.getSession(hostInfo.getUser(), hostInfo.getHost(), hostInfo.getPort());
-                    } else {
-                        session = jSch.getSession(hostInfo.getUser(), hostInfo.getHost());
+                if (null != pushInfo.getHost() && !pushInfo.getHost().isEmpty()) {
+                    JSch jSch = new JSch();
+                    for (HostInfo hostInfo : pushInfo.getHost()) {
+                        Session session = null;
+                        if (hostInfo.getPort() > 0) {
+                            session = jSch.getSession(hostInfo.getUser(), hostInfo.getHost(), hostInfo.getPort());
+                        } else {
+                            session = jSch.getSession(hostInfo.getUser(), hostInfo.getHost());
+                        }
+                        session.setConfig("StrictHostKeyChecking", "no");
+                        session.setPassword(hostInfo.getPassword());
+                        session.connect();
+                        sessionMap.put(hostInfo.getId(), session);
                     }
-                    session.setConfig("StrictHostKeyChecking", "no");
-                    session.setPassword(hostInfo.getPassword());
-                    session.connect();
-                    sessionMap.put(hostInfo.getId(), session);
                 }
 
                 for (PushStep step : pushInfo.getStep()) {
@@ -67,6 +69,8 @@ public class Main {
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (SftpException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             sessionMap.values().forEach(session -> session.disconnect());

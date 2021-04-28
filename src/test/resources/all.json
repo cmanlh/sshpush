@@ -1,0 +1,45 @@
+{
+  "host": [
+    {
+      "id": "localhost",
+      "host": "127.0.0.1",
+      "user": "test"
+    }
+  ],
+  "step": [
+    {
+      "hostId": "localhost",
+      "action": "UPLOAD",
+      "src": "/home/luhong/IdeaProjects/sshpush/src/test/resources/uploadFile.json",
+      "target": "/tmp"
+    },
+    {
+      "hostId": "localhost",
+      "action": "UPLOAD",
+      "src": "/home/luhong/IdeaProjects/sshpush/src/test",
+      "target": "/tmp"
+    },
+    {
+      "hostId": "localhost",
+      "action": "DOWNLOAD",
+      "src": "/tmp/uploadFile.json",
+      "target": "/home/luhong"
+    },
+    {
+      "hostId": "localhost",
+      "action": "DOWNLOAD",
+      "src": "/tmp/test",
+      "target": "/home/luhong"
+    },
+    {
+      "hostId": "localhost",
+      "action": "LX",
+      "exec": "rm -rf /home/luhong/test"
+    },
+    {
+      "hostId": "localhost",
+      "action": "LX",
+      "exec": "rm -f /home/luhong/uploadFile.json"
+    }
+  ]
+}

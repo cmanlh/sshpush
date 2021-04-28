@@ -11,7 +11,8 @@ public interface AuthProcessor {
     static void process(PushInfo pushInfo) {
         List<HostInfo> hostInfoList = pushInfo.getHost();
         if (null == hostInfoList || hostInfoList.isEmpty()) {
-            throw new RuntimeException("Please provide host info.");
+            System.out.println("No host info provided.");
+            return;
         }
 
         for (HostInfo hostInfo : hostInfoList) {

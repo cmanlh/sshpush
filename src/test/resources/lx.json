@@ -1,0 +1,14 @@
+{
+  "step": [
+    {
+      "hostId": "localhost",
+      "action": "LX",
+      "exec": "rm -rf /tmp/test"
+    },
+    {
+      "hostId": "localhost",
+      "action": "LX",
+      "exec": "rm -f /tmp/uploadFile.json"
+    }
+  ]
+}
