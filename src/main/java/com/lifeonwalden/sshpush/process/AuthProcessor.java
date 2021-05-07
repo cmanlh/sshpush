@@ -20,9 +20,8 @@ public interface AuthProcessor {
         System.out.println("Provide password for all host : Yes(Y) or Not(N)");
         JCommander.newBuilder().addObject(yesOrNot).build().parse("-confirm");
 
-        if ("Y".equalsIgnoreCase(yesOrNot.isYesOrNot())) {
+        if ("Y".equalsIgnoreCase(yesOrNot.getYesOrNot())) {
             ParamPassword pwd = new ParamPassword();
-            System.out.printf("Please input the password");
             JCommander.newBuilder().addObject(pwd).build().parse("-p");
 
             for (HostInfo hostInfo : hostInfoList) {

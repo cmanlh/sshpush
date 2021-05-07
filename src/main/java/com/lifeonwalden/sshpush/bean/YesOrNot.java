@@ -7,7 +7,7 @@ public class YesOrNot {
     @Parameter(names = "-confirm", description = "Yes(Y) Or Not(n)", password = true, echoInput = true)
     private String yesOrNot = "Y";
 
-    public String isYesOrNot() {
+    public String getYesOrNot() {
         return yesOrNot;
     }
 

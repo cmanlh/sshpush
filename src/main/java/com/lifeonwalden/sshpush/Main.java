@@ -1,6 +1,7 @@
 package com.lifeonwalden.sshpush;
 
 import com.alibaba.fastjson.JSON;
+import com.beust.jcommander.JCommander;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -8,6 +9,7 @@ import com.jcraft.jsch.SftpException;
 import com.lifeonwalden.sshpush.bean.HostInfo;
 import com.lifeonwalden.sshpush.bean.PushInfo;
 import com.lifeonwalden.sshpush.bean.PushStep;
+import com.lifeonwalden.sshpush.bean.YesOrNot;
 import com.lifeonwalden.sshpush.constant.ActionType;
 import com.lifeonwalden.sshpush.parse.ConfigurationParse;
 import com.lifeonwalden.sshpush.process.*;
@@ -48,8 +50,22 @@ public class Main {
                     }
                 }
 
+                YesOrNot yesOrNot = new YesOrNot();
+                System.out.println("Want to ignore some steps ? Yes(Y) or Not(N)");
+                JCommander.newBuilder().addObject(yesOrNot).build().parse("-confirm");
 
                 for (PushStep step : pushInfo.getStep()) {
+                    if ("Y".equalsIgnoreCase(yesOrNot.getYesOrNot())) {
+                        YesOrNot ignore = new YesOrNot();
+                        printStepInfo(step);
+                        System.out.println("Want to ignore this step ? Yes(Y) or Not(N)");
+                        JCommander.newBuilder().addObject(ignore).build().parse("-confirm");
+
+                        if ("Y".equalsIgnoreCase(ignore.getYesOrNot())) {
+                            continue;
+                        }
+                    }
+
                     if (ActionType.UPLOAD.name().equalsIgnoreCase(step.getAction())) {
                         UploadProcessor.process(step, sessionMap);
                     } else if (ActionType.DOWNLOAD.name().equalsIgnoreCase(step.getAction())) {
@@ -75,6 +91,20 @@ public class Main {
             e.printStackTrace();
         } finally {
             sessionMap.values().forEach(session -> session.disconnect());
+        }
+    }
+
+    private static void printStepInfo(PushStep step) {
+        if (ActionType.UPLOAD.name().equalsIgnoreCase(step.getAction())) {
+            System.out.printf("\nUpload [ %s ] to [ %s ] @ %s\n", step.getSrc(), step.getTarget(), step.getHostId());
+        } else if (ActionType.DOWNLOAD.name().equalsIgnoreCase(step.getAction())) {
+            System.out.printf("\nDownload to [ %s ] from [ %s ] @ %s\n", step.getTarget(), step.getSrc(), step.getHostId());
+        } else if (ActionType.RX.name().equalsIgnoreCase(step.getAction())) {
+            System.out.printf("\nRX [ %s ] @ %s\n", step.getExec(), step.getHostId());
+        } else if (ActionType.LX.name().equalsIgnoreCase(step.getAction())) {
+            System.out.printf("\nLX [ %s ] @ %s\n", step.getExec(), step.getHostId());
+        } else {
+            throw new RuntimeException("Invalid action : %s".concat(JSON.toJSONString(step)));
         }
     }
 }
