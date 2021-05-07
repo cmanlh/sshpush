@@ -48,6 +48,7 @@ public class Main {
                     }
                 }
 
+
                 for (PushStep step : pushInfo.getStep()) {
                     if (ActionType.UPLOAD.name().equalsIgnoreCase(step.getAction())) {
                         UploadProcessor.process(step, sessionMap);
