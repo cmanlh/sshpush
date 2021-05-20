@@ -56,12 +56,7 @@ public class Main {
 
                 for (PushStep step : pushInfo.getStep()) {
                     if ("Y".equalsIgnoreCase(yesOrNot.getYesOrNot())) {
-                        YesOrNot ignore = new YesOrNot();
-                        printStepInfo(step);
-                        System.out.println("Want to ignore this step ? Yes(Y) or Not(N)");
-                        JCommander.newBuilder().addObject(ignore).build().parse("-confirm");
-
-                        if ("Y".equalsIgnoreCase(ignore.getYesOrNot())) {
+                        if (step.isSkip()) {
                             continue;
                         }
                     }

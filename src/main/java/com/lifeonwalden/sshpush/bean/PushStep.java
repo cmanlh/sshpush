@@ -6,6 +6,7 @@ public class PushStep {
     private String exec;
     private String target;
     private String src;
+    private boolean skip;
 
     public String getHostId() {
         return hostId;
@@ -49,6 +50,16 @@ public class PushStep {
 
     public PushStep setSrc(String src) {
         this.src = src;
+        return this;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public PushStep setSkip(boolean skip) {
+        this.skip = skip;
+
         return this;
     }
 }
